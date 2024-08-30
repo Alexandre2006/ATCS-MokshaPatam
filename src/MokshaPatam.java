@@ -23,9 +23,6 @@ public class MokshaPatam {
         // Convert board to nicer format
         int[] board = this.convertToAlexandreFormat(boardsize, ladders, snakes);
 
-        // Print board
-        System.out.println(Arrays.toString(board));
-
         // Keep track of visited tiles
         boolean[] visited = new boolean[boardsize];
         Arrays.fill(visited, false);
@@ -50,9 +47,6 @@ public class MokshaPatam {
 
                 // Get current tile
                 int currentTile = neighbours.removeFirst();
-
-                // Print current tile, move count, and boardsize
-                System.out.println("Current tile: " + currentTile + ", moves: " + moves + ", boardsize: " + boardsize);
 
                 // Check if this is the final tile
                 if (currentTile == boardsize - 1) {
