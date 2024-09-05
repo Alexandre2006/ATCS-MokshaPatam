@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Moksha Patam
@@ -13,10 +15,7 @@ import java.util.Arrays;
 
 public class MokshaPatam {
 
-    /**
-     * TODO: Complete this function, fewestMoves(), to return the minimum number of moves
-     *  to reach the final square on a board with the given size, ladders, and snakes.
-     */
+
     public int fewestMoves(int boardsize, int[][] ladders, int[][] snakes) {
         // Made a simple BFS algorithm for this. We learned BFS in ATCS last year.
 
@@ -31,7 +30,7 @@ public class MokshaPatam {
         int moves = 0;
 
         // Keep track of neighbours (and add first tile)
-        ArrayList<Integer> neighbours = new ArrayList<>();
+        Queue<Integer> neighbours = new LinkedList<>();
         neighbours.add(0);
 
         // Repeat until no more neighbours / tiles can be visited
@@ -46,7 +45,7 @@ public class MokshaPatam {
                 neighboursSize--;
 
                 // Get current tile
-                int currentTile = neighbours.removeFirst();
+                int currentTile = neighbours.remove();
 
                 // Check if this is the final tile
                 if (currentTile == boardsize - 1) {
@@ -62,13 +61,8 @@ public class MokshaPatam {
                             // Mark tile as visited
                             visited[currentTile + i - 1] = true;
 
-                            // If regular tile, add to neighbours
-                            if (board[currentTile + i] == -1) {
-                                neighbours.add(currentTile + i);
-                            } else {
-                                // If special tile, add end location of snake/ladder to neighbours
-                                neighbours.add(board[currentTile + i]);
-                            }
+                            // Add tile to neighbours
+                            neighbours.add(board[currentTile + i]);
                         }
                     }
                 }
@@ -83,9 +77,13 @@ public class MokshaPatam {
     }
 
     private int[] convertToAlexandreFormat(int boardsize, int[][] ladders, int[][] snakes) {
-        // Create array (size boardsize) full of -1 (default value, not a special space)
+        // Create array (size boardsize)
         int[] board = new int[boardsize];
-        Arrays.fill(board, -1);
+
+        // Fill board with default values (no snake/ladder)
+        for (int i = 0; i < boardsize; i++) {
+            board[i] = i;
+        }
 
         // NOTE: I initially forgot to subtract 1 from the end of the ladder/snake
         // since the instructions specify that the board starts at 1, not 0, and I
