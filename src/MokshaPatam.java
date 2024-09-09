@@ -14,15 +14,9 @@ import java.util.Queue;
  */
 
 public class MokshaPatam {
-
-
     public int fewestMoves(int boardsize, int[][] ladders, int[][] snakes) {
         // Convert board to nicer (more efficient and easier to use) format
         int[] board = this.convertToAlexandreFormat(boardsize, ladders, snakes);
-
-        // Keep track of visited tiles
-        boolean[] visited = new boolean[boardsize + 1];
-        Arrays.fill(visited, false);
 
         // Keep track of moves
         int moves = 0;
@@ -55,12 +49,12 @@ public class MokshaPatam {
                     // Check if we are not out of bounds
                     if (currentTile + i <= boardsize) {
                         // Check if we have not visited this tile before
-                        if (!visited[currentTile + i]) {
-                            // Mark tile as visited
-                            visited[currentTile + i] = true;
-
+                        if (board[currentTile + i] != -1) {
                             // Add tile to neighbours
                             neighbours.add(board[currentTile + i]);
+
+                            // Mark tile as visited
+                            board[currentTile + i] = -1;
                         }
                     }
                 }
