@@ -17,13 +17,11 @@ public class MokshaPatam {
 
 
     public int fewestMoves(int boardsize, int[][] ladders, int[][] snakes) {
-        // Made a simple BFS algorithm for this. We learned BFS in ATCS last year.
-
-        // Convert board to nicer format
+        // Convert board to nicer (more efficient and easier to use) format
         int[] board = this.convertToAlexandreFormat(boardsize, ladders, snakes);
 
         // Keep track of visited tiles
-        boolean[] visited = new boolean[boardsize];
+        boolean[] visited = new boolean[boardsize + 1];
         Arrays.fill(visited, false);
 
         // Keep track of moves
@@ -31,7 +29,7 @@ public class MokshaPatam {
 
         // Keep track of neighbours (and add first tile)
         Queue<Integer> neighbours = new LinkedList<>();
-        neighbours.add(0);
+        neighbours.add(1);
 
         // Repeat until no more neighbours / tiles can be visited
         while (!neighbours.isEmpty()) {
@@ -48,18 +46,18 @@ public class MokshaPatam {
                 int currentTile = neighbours.remove();
 
                 // Check if this is the final tile
-                if (currentTile == boardsize - 1) {
+                if (currentTile == boardsize) {
                     return moves;
                 }
 
                 // Otherwise, calculate new neighbours (for all dice rolls)
                 for (int i = 1; i <= 6; i++) {
                     // Check if we are not out of bounds
-                    if (currentTile + i <= boardsize - 1) {
+                    if (currentTile + i <= boardsize) {
                         // Check if we have not visited this tile before
-                        if (!visited[currentTile + i - 1]) {
+                        if (!visited[currentTile + i]) {
                             // Mark tile as visited
-                            visited[currentTile + i - 1] = true;
+                            visited[currentTile + i] = true;
 
                             // Add tile to neighbours
                             neighbours.add(board[currentTile + i]);
@@ -77,26 +75,22 @@ public class MokshaPatam {
     }
 
     private int[] convertToAlexandreFormat(int boardsize, int[][] ladders, int[][] snakes) {
-        // Create array (size boardsize)
-        int[] board = new int[boardsize];
+        // Create array to store board
+        int[] board = new int[boardsize + 1];
 
-        // Fill board with default values (no snake/ladder)
-        for (int i = 0; i < boardsize; i++) {
+        // Fill board with default values
+        for (int i = 0; i < boardsize + 1; i++) {
             board[i] = i;
         }
 
-        // NOTE: I initially forgot to subtract 1 from the end of the ladder/snake
-        // since the instructions specify that the board starts at 1, not 0, and I
-        // was using 0-based indexing for the rest of my code.
-
         // Add ladders to board
         for (int[] ladder : ladders) {
-            board[ladder[0]] = ladder[1] - 1;
+            board[ladder[0]] = ladder[1];
         }
 
         // Add snakes to board
         for (int[] snake : snakes) {
-            board[snake[0]] = snake[1] - 1;
+            board[snake[0]] = snake[1];
         }
 
         // Return board
